@@ -52,6 +52,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
+# Use domestic PyPI mirror to speed up package downloads in China/Volcano engine
+ENV PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+ENV PIP_TRUSTED_HOST=mirrors.aliyun.com
+
 # Python deps (install before copying code for layer caching)
 COPY agent/requirements.txt agent/requirements.txt
 RUN pip install --no-cache-dir -r agent/requirements.txt
