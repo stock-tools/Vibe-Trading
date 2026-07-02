@@ -28,7 +28,19 @@ WORKDIR /app
 #   Cairo/gdk-pixbuf) per its official Debian install list; without them the
 #   lazy `from weasyprint import HTML` in reporter.py fails and PDF rendering
 #   silently downgrades to HTML-only. fonts-dejavu-core gives non-blank PDFs.
-COPY debian.sources.aliyun /etc/apt/sources.list.d/debian.sources
+RUN cat > /etc/apt/sources.list.d/debian.sources <<'EOF'
+Types: deb
+URIs: http://mirrors.aliyun.com/debian
+Suites: trixie trixie-updates
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+
+Types: deb
+URIs: http://mirrors.aliyun.com/debian-security
+Suites: trixie-security
+Components: main
+Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
+EOF
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpango-1.0-0 \
